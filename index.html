@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Fantasy Football GenV</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<style>
+.card-player img {
+    height: 130px;
+    object-fit: cover;
+}
+.card-player {
+    width: 150px;
+}
+.slot-empty {
+    border: 2px dashed #aaa;
+    padding: 20px;
+    text-align: center;
+    color: #777;
+}
+</style>
+</head>
+<body class="bg-light">
+
+<header class="p-3 bg-dark text-white d-flex justify-content-between align-items-center">
+    <h2>Fantasy Football GenV</h2>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalJoueur">+ Ajouter un joueur</button>
+</header>
+
+<div class="container-fluid mt-3">
+    <div class="row">
+
+        <!-- SIDEBAR -->
+        <div class="col-3">
+            <h4>Liste des joueurs</h4>
+            <select id="filterPoste" class="form-control mb-3">
+                <option selected>Tous les postes</option>
+                <option>Gardien</option>
+                <option>Défenseur</option>
+                <option>Milieu</option>
+                <option>Attaquant</option>
+            </select>
+            <div id="listeJoueurs"></div>
+        </div>
+
+        <!-- COMPOSITION -->
+        <div class="col-9">
+            <h4>Composition</h4>
+
+            <div id="terrain">
+
+                <h5>Gardien</h5>
+                <div id="Gardien" class="slot" data-poste="Gardien"></div>
+
+                <h5>Défenseurs</h5>
+                <div class="row" id="defenseurs"></div>
+
+                <h5>Milieux</h5>
+                <div class="row" id="milieux"></div>
+
+                <h5>Attaquants</h5>
+                <div class="row" id="attaquants"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="p-3 bg-dark text-white text-center">
+    Budget restant : <span id="budget">100</span> Millions $
+    <button id="resetBtn" class="btn btn-danger ms-3">🗑 Réinitialiser</button>
+</footer>
+
+<!-- MODAL -->
+<div class="modal fade" id="modalJoueur">
+    <div class="modal-dialog">
+        <div class="modal-content p-3">
+            <h4>Ajouter un joueur</h4>
+
+            <form id="formJoueur">
+                <input id="nom" class="form-control mb-2" placeholder="Nom complet">
+
+                <select id="poste" class="form-control mb-2">
+                    <option>Gardien</option>
+                    <option>Défenseur</option>
+                    <option>Milieu</option>
+                    <option>Attaquant</option>
+                </select>
+
+                <input id="nationalite" class="form-control mb-2" placeholder="Nationalité">
+
+                <input id="prix" type="number" class="form-control mb-2" placeholder="Prix (M$)">
+
+                <input id="photo" class="form-control mb-3" placeholder="URL Photo">
+
+            </form>
+            <button id="btn-en" class="btn btn-primary w-100">Enregistrer</button>
+
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
