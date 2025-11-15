@@ -1,0 +1,24 @@
+body{
+ background-image: linear-gradient(to right , rgb(8, 5, 49) 50% , #0d16c2);
+ color: white;
+    }
+.card-player img {
+    height: 130px;
+    object-fit: cover;
+}
+.card-player {
+    width: 150px;
+}
+.slot-empty {
+    border: 2px dashed #aaa;
+    padding: 20px;
+    text-align: center;
+    color: #777;
+}
+div#content-com{
+    background: url(dimensions-arcs-cercle-terrain-foot.png)  no-repeat;
+    background-size: cover; height: fit-content;
+}
+#attaquants,#milieux,#defenseurs{
+    place-content:center;
+}

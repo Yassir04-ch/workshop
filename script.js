@@ -11,11 +11,15 @@ const prix = document.getElementById("prix");
 const photo = document.getElementById("photo");
 const nationalite = document.getElementById("nationalite");
 const  select = document.getElementById("filterPoste")
+const budj = document.getElementById("budget")
+
 
 let joueurs = JSON.parse(localStorage.getItem("joueurs")) || [];
 
 btn_en.addEventListener("click",function(e){
+
     e.preventDefault();
+
     if(nom.value.trim()===''){
         nom.style.border = "2px solid red"
         alert("entre le nom");
@@ -111,10 +115,20 @@ let composition = JSON.parse(localStorage.getItem("composition")) || {
     milieux: [],
     attaquants: [],
 };
+
+let budget = JSON.parse(localStorage.getItem("budj")) || 100;
+
 function ajouterAComposition(i){
      const joueur = joueurs[i]
+    if (budget - joueur.prix < 0){
+    alert("budget  insuffisant ")
+    return
+   }
+      budget = budget - joueur.prix
+      budj.textContent = budget 
+
      if(joueur.poste ==="Gardien"){
-     if(composition.gardien !=null){
+      if(composition.gardien !=null){
         alert("errur top de gardian est 1")
         return
      }
@@ -139,40 +153,44 @@ function ajouterAComposition(i){
       composition.attaquants.push(joueur);
      
     }
+
+     localStorage.setItem("budj", JSON.stringify(budget));
     localStorage.setItem("composition",JSON.stringify(composition))
     afficherComposition();
+    location.reload();  
+
 }
+// afficher le budget
+budj.textContent = budget 
+
+
+
 function afficherComposition() {
-    document.getElementById("budget").innerText = budget;
+    
+    gardi.innerHTML = `
+        <div class="card p-2">
+            <p>${composition.gardien.nom}</p>
+            <img src="${composition.gardien.image}" class="rounded" style="height:150px; width:50%; margin-left:25%">
+            <button class="btn btn-sm btn-danger w-100">Retirer</button>
+        </div>
+    `;
+ 
 
-    // Gardien
-    const gZone = document.querySelector(`[data-poste="Gardien"]`);
-    gZone.innerHTML = composition.gardien
-        ? `<div class="card p-2">
-                <p>${composition.gardien.nom}</p>
-               <img src="${composition.gardien.image}" class=" rounded" style = "height:150px ; width:50%;margin-left:25%">
-               <button class="btn btn-sm btn-danger w-100">Retirer</button>
-           </div>`
-        : `<div class="slot-empty">Vide</div>`;
-
-    // Défenseurs
-    const dZone = document.getElementById("defenseurs");
-    dZone.innerHTML = "";
+    
+    defens.innerHTML = "";
     composition.defenseurs.forEach((j) => {
-        dZone.innerHTML += `
+        defens.innerHTML += `
             <div class="col-3 card p-2">
                 <p>${j.nom}</p>
                <img src="${j.image}" class="w-100 rounded" style = "height:100px">
-
                 <button class="btn btn-sm btn-danger">Retirer</button>
             </div>`;
     });
 
-    // Milieux
-    const mZone = document.getElementById("milieux");
-    mZone.innerHTML = "";
+    
+    milie.innerHTML = "";
     composition.milieux.forEach((j) => {
-        mZone.innerHTML += `
+        milie.innerHTML += `
             <div class="col-3 card p-2">
                 <p>${j.nom}</p>
                <img src="${j.image}" class="w-100 rounded" style = "height:100px;">
@@ -180,11 +198,10 @@ function afficherComposition() {
             </div>`;
     });
 
-    // Attaquants
-    const aZone = document.getElementById("attaquants");
-    aZone.innerHTML = "";
+    
+    attaq.innerHTML = "";
     composition.attaquants.forEach((j) => {
-        aZone.innerHTML += `
+        attaq.innerHTML += `
             <div class="col-3 card p-2" >
                 <p>${j.nom}</p>
                <img src="${j.image}" class="w-100 rounded" style = "height:100px">
@@ -195,100 +212,11 @@ function afficherComposition() {
     
 afficherComposition();
 
+// reinitialiser data de composition
 
-// // ========== Retirer joueur ==========
-// function retirer(categorie, index) {
-//     let joueur;
-
-//     if (categorie === "gardien") {
-//         joueur = composition.gardien;
-//         composition.gardien = null;
-//     } else {
-//         joueur = composition[categorie][index];
-//         composition[categorie].splice(index, 1);
-//     }
-
-//     budget += joueur.prix;
-//     joueurs.push(joueur);
-
-//     saveAll();
-//     afficherJoueurs();
-//     afficherComposition();
-// }
-
-// let budget = JSON.parse(localStorage.getItem("budget")) || 100;
-
-// function saveAll() {
-//     localStorage.setItem("joueurs", JSON.stringify(joueurs));
-//     localStorage.setItem("composition", JSON.stringify(composition));
-//     localStorage.setItem("budget", JSON.stringify(budget));
-// }
-
-// function ajouterAComposition(i) {
-//     const joueur = joueurs[i];
-
-//     // Budget
-//     if (budget - joueur.prix < 0) {
-//         alert("Budget insuffisant !");
-//         return;
-//     }
-
-//     // Postes
-//     if (joueur.poste === "Gardien") {
-//         if (composition.gardien != null) {
-//             alert("Il y a déjà un gardien !");
-//             return;
-//         }
-//         composition.gardien = joueur;
-//     }
-//     else if (joueur.poste === "Défenseur") {
-//         if (composition.defenseurs.length >= 4) return alert("Max défenseurs !");
-//         composition.defenseurs.push(joueur);
-//     }
-//     else if (joueur.poste === "Milieu") {
-//         if (composition.milieux.length >= 3) return alert("Max milieux !");
-//         composition.milieux.push(joueur);
-//     }
-//     else if (joueur.poste === "Attaquant") {
-//         if (composition.attaquants.length >= 3) return alert("Max attaquants !");
-//         composition.attaquants.push(joueur);
-//     }
-
-//     budget -= joueur.prix
-
-//     saveAll();
-//     afficherJoueurs();
-//     afficherComposition();
-// }
-// afficherComposition();
-
-// // ========== Affichage de la composition ==========*
-
-
-
-
-// // ========== Reset ==========
-// document.getElementById("resetBtn").addEventListener("click", function() {
-//     if (!confirm("Réinitialiser ?")) return;
-
-//     budget = 100;
-//     joueurs.push(
-//         ...composition.defenseurs,
-//         ...composition.milieux,
-//         ...composition.attaquants
-//     );
-//     if (composition.gardien) joueurs.push(composition.gardien);
-
-//     composition = {
-//         gardien: null,
-//         defenseurs: [],
-//         milieux: [],
-//         attaquants: []
-//     };
-
-//     saveAll();
-//     afficherJoueurs();
-//     afficherComposition();
-// });
-
-
+const resetBtn = document.getElementById("resetBtn")
+resetBtn.onclick = function reinitialiser(){
+  localStorage.removeItem("composition");
+  localStorage.removeItem("budj");
+  location.reload();  
+}
